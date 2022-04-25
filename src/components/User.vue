@@ -133,7 +133,7 @@ export default {
 
       if (!this.memberInfoMap[message.senderId]) {
         await getMemberInfo(message.senderId).then(data => {
-          this.memberInfoMap[message.senderId] = data.result
+          this.memberInfoMap[message.senderId] = data.data
         })
       }
 
@@ -189,7 +189,7 @@ export default {
       if(!this.init){
         getUnreadMessageList(this.token).then(data => {
           this.init = true;
-          let chatList = data.result;
+          let chatList = data.data;
           for (let i = 0; i < chatList.length; i++) {
             let chat = chatList[i];
             chat.memberKey = `${chat.type}_${chat.anchorId}_${chat.mcnId}`
@@ -243,7 +243,7 @@ export default {
           memberKey: pickedMemberName,
           username: memberInfo.username,
           headImgUrl: memberInfo.headImgUrl,
-          messageList:data.result,
+          messageList:data.data,
         }
         this.pickedMembers.push(pickedMember);
         this.pickedMemberName = pickedMemberName;

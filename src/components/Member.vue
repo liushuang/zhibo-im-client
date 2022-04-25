@@ -75,12 +75,13 @@ export default {
   },
   mounted() {
     getCurrentMemberInfo(this.token).then(data => {
-      this.memberInfo = data.result
+      this.memberInfo = data.data
     })
   },
   methods:{
     connect(){
-      this.websocketObj = new WebSocket(`ws://localhost:18080/websocket/member?token=${this.token}&mcnId=${this.mcnId}&type=${this.messageType}`);
+      this.websocketObj = new
+      WebSocket(`ws://localhost:18080/websocket/member?token=${this.token}&anchorId=${this.anchorId}&mcnId=${this.mcnId}&type=${this.messageType}`);
       this.websocketObj.onmessage = this.websocketonmessage;
       this.websocketObj.onopen = this.websocketonopen;
       this.websocketObj.onerror = this.websocketonerror;
@@ -95,6 +96,7 @@ export default {
       }
       this.messageList.push(chatMessage);
       this.websocketObj.send(JSON.stringify(chatMessage))
+      this.message = ''
     },
     websocketonmessage(e) {
       let message = JSON.parse(e.data);
@@ -112,7 +114,7 @@ export default {
       this.connectionStatus = 'closed'
     },
     moreMessage(){
-      let offset = 0;
+      let offset = 2147483647;
       if(this.messageList.length > 0){
         offset = this.messageList[0].id;
       }
@@ -124,7 +126,7 @@ export default {
         offset: offset,
       }
       getMemberChatMessage(request).then(response => {
-        this.messageList = response.result.concat(this.messageList);
+        this.messageList = response.data.concat(this.messageList);
       })
     }
   }
